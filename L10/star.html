@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件的使用</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .star {
+            font-size: 30px;
+            color: gold;
+        }
+    </style>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1714730_149dmq6hob4.css">
+</head>
+
+<body>
+    <div id="app">
+        物流评分:{{wuliu}}
+        <star :count="10" @change="wuliu=$event" color="red" :score="3"></star>
+        客服评分:{{kefu}}
+        <star :count="15" @change="kefu=$event" :score="6"></star>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    Vue.component('star', {
+        // props里面的变量 不允许被修改
+        props: {
+            count: {
+                type: Number,
+                default: 5
+            },
+            score: {
+                type: Number,
+                default: 1
+            },
+            color: {
+                type: String,
+                default: 'gold'
+            }
+        },
+        watch: {
+            myscore(val) {
+                this.$emit('change', val)
+            }
+        },
+        template: `<div> <i class="star iconfont" 
+            :class="item<=mytempscore?'icon-star2':'icon-star11'" 
+            v-for="item in count" 
+            :style="{color:color}"
+            @mouseenter="mytempscore=item" 
+            @mouseleave="mytempscore=myscore" 
+            @click="myscore = item"></i>
+            </div>
+       `,
+        data() {
+            return {
+                myscore: this.score,
+                mytempscore: this.score,
+            }
+        },
+    })
+
+    let vm = new Vue({
+        el: "#app",
+        data() {
+            return {
+                kefu: 6,
+                wuliu: 3
+            }
+        },
+        methods: {
+
+        },
+    })
+</script>
+
+</html>

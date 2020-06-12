@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .demo {
+            margin: 0;
+            padding: 0;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .demo li {
+            width: 500px;
+            height: 200px;
+            font-size: 60px;
+            text-align: center;
+            line-height: 200px;
+            color: #ccc;
+        }
+        
+        .container {
+            width: 500px;
+            margin: 100px auto;
+            height: 200px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .indexes {
+            display: flex;
+            position: absolute;
+            bottom: 10px;
+        }
+        
+        .indexes li {
+            padding: 5px;
+            background-color: #eee;
+            margin: 0 5px;
+            border-radius: 50%;
+        }
+        
+        .indexes li.active {
+            background-color: #000;
+        }
+        
+        .arrow {
+            width: 30px;
+            height: 60px;
+            background-color: gray;
+            position: absolute;
+        }
+        
+        .arrow.left {
+            left: -50px;
+        }
+        
+        .arrow.right {
+            right: -50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="arrow left" @click="prev"></div>
+            <div class="arrow right" @click="next"></div>
+            <ul class="demo">
+                <li v-show="i===activeIndex" v-for="(item,i) in imglist" :style="{background:item}">
+                    {{i+1}}
+                </li>
+            </ul>
+            <ul class="indexes">
+                <li :class="{active:i===activeIndex}" @click="change(i)" v-for="(item,i) in imglist">
+
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // Vue.config.devtools = false
+        Vue.config.productionTip = false
+        let vm = new Vue({
+            created() {
+                //数据准备好了  ajax
+            },
+            mounted() {
+                //DOM 准备好了  Echarts  layui
+                this.run(this.timer)
+            },
+            el: "#app",
+            data() {
+                return {
+                    // 无法拿到timer  定时器返回值为 ID 所有先声明
+                    timer: -1,
+                    activeIndex: 0,
+                    imglist: ['red', 'blue', 'green', 'yellow']
+                }
+            },
+            methods: {
+                run() {
+                    this.timer = setInterval(() => {
+                        if (++this.activeIndex === this.imglist.length)
+                            this.activeIndex = 0
+                    }, 2000);
+                },
+
+                change(i) {
+                    clearInterval(this.timer)
+                    this.activeIndex = i
+                    this.run()
+                },
+                next() {
+                    clearInterval(this.timer)
+                    if (++this.activeIndex === this.imglist.length)
+                        this.activeIndex = 0
+                    this.run()
+                },
+                prev() {
+                    clearInterval(this.timer)
+                    if (--this.activeIndex < 0)
+                        this.activeIndex = this.imglist.length - 1
+                    this.run()
+
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .demo {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .demo li {
+            width: 500px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <ul class="demo">
+            <li v-show="i===activeIndex" v-for="(item,i) in imglist" :style="{background:item}">
+            </li>
+        </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // Vue.config.devtools = false
+        Vue.config.productionTip = false
+        let vm = new Vue({
+            created() {
+                //数据准备好了  ajax
+            },
+            mounted() {
+                //DOM 准备好了  Echarts  layui
+                setInterval(() => {
+                    if (++this.activeIndex === this.imglist.length)
+                        this.activeIndex = 0
+                }, 1000);
+            },
+            el: "#app",
+            data() {
+                return {
+                    activeIndex: 0,
+                    imglist: ['red', 'blue', 'green', 'blue']
+                }
+            },
+            methods: {
+
+            },
+        })
+    </script>
+</body>
+
+</html>

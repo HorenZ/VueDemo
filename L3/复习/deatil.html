@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大麦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .price {
+            display: flex;
+        }
+        
+        .price li {
+            padding: 10px 20px;
+            border: solid 1px #bbbbbb;
+            border-radius: 5px;
+            margin: 0 15px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .active {
+            background-color: orangered;
+            color: #eeeeee;
+        }
+        
+        .counter {
+            display: flex;
+            padding: 10px;
+            margin: 0 40px;
+            border: 1px solid #eeeeee;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" style="width: 100%;height: 100%;" v-cloak>
+        <div style="width: 1000px; margin: 100px auto;padding: 0 20px;display: flex;">
+            <img src="https://img.alicdn.com/bao/uploaded/https://img.alicdn.com/imgextra/i1/2251059038/O1CN01ITu2EV2GdSE3xXYdm_!!2251059038.jpg" alt="" srcset="">
+            <div style="padding: 0px 20px;">
+                <div style="padding: 20px 0;">
+                    <h2>【{{showinfo.venuecity}}】{{showinfo.name}}</h2>
+                </div>
+                <div style="padding: 20px 0;">时间:{{showinfo.showtime}}</div>
+                <div>场馆:{{showinfo.venue}}</div>
+                <div style="display: flex;padding: 20px 0;">
+                    <div>票档：</div>
+                    <ul class="price">
+                        <li @click="activeid=i" :class={active:i===activeid} v-for="(item,i) in pricelist">{{item}}</li>
+                    </ul>
+                </div>
+                <div style="display: flex; padding: 20px 0;">
+                    数量
+                    <div class="counter">
+                        <button :disabled="count===1" @click="count--" style="padding: 5px 10px;">-</button>
+                        <input type="text" v-model="count" style="width: 30px;text-align: center;border: none;">
+                        <button :disabled="count===3" @click="count++" style="padding: 5px 10px;">+</button>
+                    </div>
+                </div>
+                <div style="display: flex;">
+                    <div>总价</div>
+                    <div style="padding: 10px;margin: 10px 30px;">
+                        <h2>{{totalprice}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+            let vm = new Vue({
+                el: "#app",
+                created() {
+                    this.getData()
+                },
+                computed: {
+                    totalprice() {
+                        return this.count * this.pricelist[this.activeid]
+                    }
+                },
+                data() {
+                    return {
+                        pricelist: [280, 490, 680, 880],
+                        activeid: 0,
+                        showinfo: {},
+                        count: 1
+                    }
+                },
+                watch: {
+                    count() {
+                        if (isNaN(this.count)) this.count = 1
+                        if (!Number.isInteger(this.count)) this.count = Math.floor(this.count)
+                        if (this.count > 3) this.count = 3
+                        if (this.count < 1) this.count = 1
+
+                    }
+                },
+                methods: {
+                    getQueryStr() {
+                        let queryStr = {}
+                        if (!window.location.search) return queryStr
+                        let d = window.location.search.replace('?', '')
+                        let arr = d.split('&')
+                        arr.forEach(r => {
+                            str = r.split('=')
+                            queryStr[str[0]] = str[1]
+                        })
+                        return queryStr;
+                    },
+                    async getData() {
+                        let res = await axios.get('show.json')
+
+                        let queryArr = this.getQueryStr()
+                        let arr = res.data.find(r => r.id == queryArr.id)
+
+                        this.showinfo = arr
+                    }
+                },
+            })
+        </script>
+</body>
+
+</html>

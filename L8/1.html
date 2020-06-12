@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div ref="zzz">zzzz</div>
+        <red ref="aa" size="60px">Ivan</red>
+        <red ref="bb" size="40px">
+            <zzz></zzz>
+        </red>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="components/red.js"></script>
+    <script>
+        // 全局
+        Vue.component('zzz', {
+            template: `<button>登录</button>`
+        })
+
+        let vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    nickname: 'Ivan'
+                }
+            },
+            mounted() {
+                // console.log(this.$children);
+                console.log(this.$refs.zzz)
+                this.$refs.zzz.style.color = 'green'
+            },
+        })
+    </script>
+</body>
+
+</html>

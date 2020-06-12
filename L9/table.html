@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表格组件</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .tb {
+            width: 100%;
+            text-align: center;
+            border-collapse: collapse;
+        }
+        
+        .tb.hover-change-color tr:hover {
+            background: #eee;
+        }
+        
+        .tb td,
+        .td th {
+            padding: 5px 0;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div style="width:700px;">
+            <tb hover-change-color :data="userlist">
+                <tb-col field="id" label="编号" width="100"></tb-col>
+                <tb-col field="name" label="姓名" width="300"></tb-col>
+                <tb-col field="age" label="年龄" width="100"></tb-col>
+                <tb-col field="email" label="邮箱" width="100"></tb-col>
+                <tb-col field="email" label="邮箱" width="100"></tb-col>
+            </tb>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.common.dev.js"></script>
+
+    <script>
+        Vue.component('tb-col', {
+            props: ['field', 'label', 'width'],
+            template: `
+                <th :style="{width:width+'px'}">{{label}}</th>
+            `,
+            created() {
+                this.$parent.fieldList.push(this.field)
+            },
+        })
+
+        Vue.component('tb', {
+            props: {
+                data: {
+                    type: Array,
+                },
+                hoverChangeColor: {
+                    type: Boolean
+                }
+            },
+            mounted() {
+
+            },
+            data() {
+                return {
+                    fieldList: []
+                }
+            },
+            template: `
+            <table class="tb" :class="{'hover-change-color':hoverChangeColor}">
+                <tr>
+                    <slot></slot>
+                </tr>
+                <tr v-for="row in data">
+                    <td v-for='key in fieldList'>{{row[key]}}</td>
+                </tr>
+            </table>
+            `
+        })
+
+
+        let vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    userlist: [{
+                        name: 'Ivan',
+                        id: 1001,
+                        age: 20,
+                        email: 'XX@qq.com'
+                    }, {
+                        name: 'ACE',
+                        id: 1002,
+                        age: 22,
+                        email: 'XX@qq.com'
+                    }, {
+                        name: 'JZ',
+                        id: 1003,
+                        age: 21,
+                        email: 'XX@qq.com'
+                    }],
+                    cols: ['编号', '姓名', '年龄']
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

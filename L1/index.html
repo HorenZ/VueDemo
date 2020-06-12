@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div id="app">
+        <!-- <h1>
+            {{nickname}}---{{img}}
+        </h1> -->
+        <fieldset>
+            <legend>添加</legend>
+            <div>
+                图片<input type="text" v-model="img">
+            </div>
+            <div>
+                昵称<input type="text" v-model="nickname">
+            </div>
+            <div>
+                <button @click="add">添加</button>
+            </div>
+        </fieldset>
+        <ul>
+            <li v-for="(obj,i) in arr">
+                <img v-bind:src="obj.img" style="width: 100px;height: 150px;">
+                <a :href="'detail.html?name='+obj.name">{{obj.name}}</a>
+                <button @click="del(i)">删除</button>
+            </li>
+        </ul>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        Vue.config.devtools = false
+        Vue.config.productionTip = false
+        let vm = new Vue({
+            created() {
+                //数据准备好了  ajax
+            },
+            mounted() {
+                //DOM 准备好了  Echarts  layui
+            },
+            el: "#app",
+            data() {
+                return {
+                    arr: [{
+                        img: "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1584971884&di=f53268dd089ba504239e2bbc611ea58b&src=http://img.qqzhi.com/uploads/2018-11-29/091359896.jpg",
+                        name: 'simba'
+                    }, {
+                        img: "https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=495293995,725540412&fm=111&gp=0.jpg",
+                        name: 'ace'
+                    }, {
+                        img: "https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3246072571,3948247962&fm=26&gp=0.jpg",
+                        name: 'roger'
+                    }]
+                }
+            },
+            methods: {
+                del(i) {
+                    //从数组删除一个
+                    this.arr.splice(i, 1)
+                },
+                add() {
+                    this.arr.unshift({
+                        img: this.img,
+                        name: this.nickname
+                    })
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .container {
+            width: 1000px;
+            margin: 100px auto;
+            display: flex;
+        }
+        
+        .pricelist {
+            display: flex;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        
+        .pricelist li {
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            margin: 10px 10px;
+            /* 不可选中文字 */
+            user-select: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .pricelist li.active {
+            background: orangered;
+            color: #fff;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .counter {
+            display: flex;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 0 20px;
+        }
+        
+        .counter button {
+            width: 30px;
+            border: none;
+            outline: none;
+        }
+        
+        .counter input {
+            border: none;
+            outline: none;
+            width: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="container">
+            <img :src="showInfo.verticalPic" alt="">
+            <div style="padding: 0 20px;">
+                <div>
+                    <h2>【{{showInfo.cityname}}】{{showInfo.name}}</h2>
+                </div>
+                <div style="padding: 20px 0;">时间：{{showInfo.showtime}}</div>
+                <div>场馆：{{showInfo.venue}}</div>
+                <div style="display: flex; padding: 20px 0;">
+                    <div style="padding-top: 10px;">票档</div>
+                    <ul class="pricelist">
+                        <li @click="activeIndex=i" :class="{active:activeIndex===i}" v-for="(item,i) in pricelist">
+                            {{item}}
+                        </li>
+                    </ul>
+                </div>
+                <div style="display: flex; padding: 20px 0;">
+                    <div style="padding-top: 10px;">数量</div>
+                    <div class="counter">
+                        <button @click="count--" :disabled="count===1">-</button>
+                        <input type="text" style="height: 30px;" v-model="count">
+                        <button @click="count++" :disabled="count===3">+</button>
+                    </div>
+                    <div v-show="count==3">限购3张</div>
+                </div>
+                <!-- 过滤器 -->
+                <h2>{{totalprice|fiexd2}}</h2>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./untils/filter.js"></script>
+    <script>
+        //全局过滤器    单独放到js文件中 在vue后加载
+        // Vue.filter('fiexd2', function(val) {
+        //     return val.toFixed(2)
+        // })
+
+        function getQueryParams() {
+            let obj = {}
+            if (!location.search) return obj
+            let queryStrAtt = location.search.replace('?', '').split('&')
+            queryStrAtt.forEach(r => {
+                let arr = r.split('=')
+                obj[arr[0]] = arr[1]
+            })
+            return obj
+        }
+
+
+
+        new Vue({
+            el: "#app",
+            //局部过滤器
+            // filters: {
+            //     fiexd2(val) {
+            //         return val.toFixed(2)
+            //     }
+            // },
+            created() {
+                this.getShowInfo()
+            },
+            mounted() {
+
+            },
+            methods: {
+                async getShowInfo() {
+                    let res = await axios.get('show.json')
+                    console.log(res.data)
+                    let id = getQueryParams().id
+                    let show = res.data.find(r => r.id + '' === id + '')
+                    this.showInfo = show
+                }
+            },
+            computed: {
+                //不能在data中定义该属性
+                totalprice() {
+
+                    return this.count * this.pricelist[this.activeIndex]
+                }
+            },
+            watch: {
+                count(val) {
+                    //判断是否为数字
+                    if (isNaN(this.count)) this.count = 1
+
+                    //去除小数部分
+                    if (!Number.isInteger(this.count)) this.count = Math.floor(this.count)
+                    if (this.count > 3) this.count = 3
+                    if (this.count < 1) this.count = 1
+                },
+                activeIndex() {
+                    this.count = 1
+                }
+            },
+            data() {
+                return {
+                    showInfo: {},
+                    pricelist: [480, 680, 880, 1280, 1480],
+                    activeIndex: 0,
+                    count: 1
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

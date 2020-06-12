@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .container {
+            width: 500px;
+            margin: 100px auto;
+            height: 300px;
+            border: 1px solid red;
+        }
+        
+        .header {
+            display: flex;
+        }
+        
+        .header li {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+        }
+        
+        .header li.active {
+            border-bottom: 2px solid orangered;
+            color: orangered;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        let vm = new Vue({
+            el: "#app",
+
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1714730_sqb0an4ol6i.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .menu {
+            width: 200px;
+            background-color: rgba(0, 0, 0);
+            height: 100vh;
+        }
+        
+        .menu .title {
+            padding: 10px 20px;
+            color: #eee;
+            font-size: 15px;
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+        
+        .menu>li.active .title {
+            border-left-color: yellow;
+        }
+        
+        .menu .list {
+            background-color: #2b2b2b;
+        }
+        
+        .menu .list li {
+            padding: 8px 20px;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .menu .list li:hover {
+            background: rgba(255, 255, 0, 0.369);
+        }
+        
+        .menu .list>li.active {
+            background: yellow;
+            color: #2b2b2b;
+        }
+        
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity .5s;
+        }
+        
+        .fade-enter,
+        .fade-leave-to
+        /* .fade-leave-active below version 2.1.8 */
+        
+        {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <ul class="menu">
+            <li v-for="(item,i) in menulist" @click="openMenuIndex = i" :class="{active:openMenuIndex===i}">
+                <div class="title">
+                    <i class="iconfont " :class="item.icon"></i>{{item.name}}
+                </div>
+                <!-- vue过度动画 transition-->
+                <transition name="fade">
+                    <ul class="list" v-show="openMenuIndex == i">
+                        <li @click="activeItemIndex = j" v-for="(item1,j) in item.children" :class="{active:activeItemIndex===j && openMenuIndex===i}">{{item1.name}}</li>
+                    </ul>
+                </transition>
+            </li>
+        </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        let vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    openMenuIndex: 0,
+                    activeItemIndex: 0,
+                    menulist: [{
+                        name: "学员管理",
+                        icon: "icon-home",
+                        children: [{
+                            // 扩展
+                            // href: 'xxx',
+                            // icon: 'asda',
+                            name: '学员列表'
+                        }, {
+                            name: '添加学员'
+                        }, {
+                            name: '学员统计'
+                        }]
+                    }, {
+                        name: "订单管理",
+                        icon: 'icon-favorites',
+                        children: [{
+                            // 扩展
+                            // href: 'xxx',
+                            // icon: 'asda',
+                            name: '订单列表'
+                        }, {
+                            name: '添加订单'
+                        }]
+                    }, {
+                        name: "商品管理",
+                        icon: 'icon-search',
+                        children: [{
+                            // 扩展
+                            // href: 'xxx',
+                            // icon: 'asda',
+                            name: '商品列表'
+                        }]
+                    }]
+                }
+            },
+            watch: {
+                openMenuIndex() {
+                    this.activeItemIndex = -1
+                }
+            },
+            methods: {
+
+            },
+        })
+    </script>
+</body>
+
+</html>

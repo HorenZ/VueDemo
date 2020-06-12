@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cake</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .list {
+            display: flex;
+            border: 1px solid burlywood;
+            padding: 10px 0;
+            color: burlywood;
+            align-items: center;
+        }
+        
+        .list li {
+            flex: 1;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div v-if="goodslist.length" style="width: 1000px;margin: 100px auto;">
+            <ul class="list">
+                <li><input type="checkbox" @change="CheckAll" v-model="isCheckAll">全选</li>
+                <li>商品</li>
+                <li>单价</li>
+                <li>数量</li>
+                <li>金额</li>
+                <li>操作</li>
+            </ul>
+            <div style="margin-top: 20px;border: 1px solid burlywood;padding: 20px;">
+                <ul class="list" style="border: none;border-bottom: 1px solid #ccc;" v-for="item in goodslist">
+                    <li><input @change="changeChecked" type="checkbox" v-model="item.isChecked"></li>
+                    <li>
+                        <div>{{item.name}}</div>
+                    </li>
+                    <li style="color: chocolate;">{{item.price |fixed2 |fmtRMB}}</li>
+                    <li>
+                        <button :disabled="item.count===1" @click="item.count--" style="padding: 5px;">-</button>
+                        <input type="text" style="width: 30px;text-align: center;" @keydown.enter="changeCount(item,$event)" @blur="changeCount(item,$event)" :value="item.count">
+                        <button :disabled="item.count===limitcount" @click="item.count++" style="padding: 5px;">+</button>
+                    </li>
+                    <li>{{calc(item)|fixed2 | fmtRMB}}</li>
+                    <li>
+                        <a @click="del(item.id)" style="width: 100px;padding: 10px 20px;border:1px solid burlywood">删除</a>
+                    </li>
+                </ul>
+            </div>
+            <button @click="goodslist=[]">全部清空</button>
+            <h1>总价：{{totalPrice|fixed2 |fmtRMB}}</h1>
+        </div>
+
+        <h1 v-else>您的购物车空空如也</h1>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+
+    <script>
+        let vm = new Vue({
+            el: "#app",
+            filters: {
+                fmtRMB(val) {
+                    return '¥' + val
+                },
+                fixed2(val) {
+                    return val.toFixed(2)
+                }
+
+            },
+
+            computed: {
+                totalPrice() {
+                    // let arr = [1, 2, 3, 4]
+                    // return arr.reduce((a, b) => {
+                    //     return a + b
+                    // })  结果为10
+
+                    //先计算每个商品总价 放到一个新数组 再累加 
+                    if (!this.goodslist.length) {
+                        return 0
+                    }
+                    // 初始 isChecked 都为 false reduce 报错
+                    // return this.goodslist.filter(r => r.isChecked).map(r => r.price * r.count).reduce((a, b) => {
+                    //     return a + b
+                    // })
+
+                    let total = 0
+                    this.goodslist.forEach(r => {
+                        if (r.isChecked) {
+                            total += r.price * r.count
+                        }
+
+                    });
+                    return total
+                }
+            },
+            data() {
+                return {
+                    limitcount: 5,
+                    goodslist: [{
+                        id: 1,
+                        name: '四口味挂耳咖啡混合装（4包入）',
+                        price: 200,
+                        count: 1,
+                        isChecked: false
+                    }, {
+                        id: 2,
+                        name: 'Strawberry Cream Cake 草莓奶油蛋糕',
+                        price: 380,
+                        count: 2,
+                        isChecked: false
+                    }],
+                    isCheckAll: false,
+
+                }
+            },
+            methods: {
+                changeChecked() {
+                    this.isCheckAll = this.goodslist.every(r => r.isChecked)
+                },
+                CheckAll() {
+                    this.goodslist.forEach(r => {
+                        r.isChecked = this.isCheckAll
+                    });
+                },
+                del(id) {
+                    let isConfirm = confirm('确定删除？')
+                    if (isConfirm) {
+                        this.goodslist = this.goodslist.filter(r => r.id !== id)
+                    }
+
+                },
+
+                // 无法监听 item.count 
+                calc(item) {
+                    return item.count * item.price
+                },
+                changeCount(item, e) {
+                    let val = e.target.value
+                    if (isNaN(val)) val = 1
+                    if (!Number.isInteger(val)) val = Math.floor(val)
+                    val = parseInt(val)
+                    if (val > this.limitcount) val = this.limitcount
+                    if (val < 1) val = 1
+                        // 改变数组值
+                    item.count = val
+                        // dom操作 强行让value改变
+                    e.target.value = val
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

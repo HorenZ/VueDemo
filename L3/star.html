@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大麦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .star {
+            font-size: 30px;
+            color: gold;
+        }
+    </style>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1714730_149dmq6hob4.css">
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{tempscore}}--{{score}}</h1>
+        <i class="star iconfont" :class="item<=tempscore?'icon-star2':'icon-star11'" v-for="item in count" @mouseenter="tempscore=item" @mouseleave="tempscore=score" @click="score = item"></i>
+
+
+
+        <!-- <i class="star iconfont icon-star2"></i>
+        <i class="star iconfont icon-star11"></i> -->
+
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                count: 10,
+                score: 5,
+                tempscore: 5
+            }
+        },
+    })
+</script>
+
+</html>

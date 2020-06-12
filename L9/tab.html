@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复合组件</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .container {
+            width: 500px;
+            margin: 100px auto;
+            height: 300px;
+            border: 1px solid red;
+        }
+        
+        .header {
+            display: flex;
+        }
+        
+        .header li {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+        }
+        
+        .header li.active {
+            border-bottom: 2px solid orangered;
+            color: orangered;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <tabs>
+            <tab-item label="火车票">
+                <h1>火车票火车票火车票火车票</h1>
+            </tab-item>
+            <tab-item label="汽车票">
+                <h1>汽车票汽车票汽车票</h1>
+            </tab-item>
+            <tab-item label="飞机票">
+                <h1>飞机票飞机票</h1>
+            </tab-item>
+        </tabs>
+
+        <tabs>
+            <tab-item v-for="item in lists" :label="item">
+                <h1>{{item}}</h1>
+            </tab-item>
+        </tabs>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        Vue.component('tab-item', {
+            props: {
+                label: {
+                    type: String,
+                    required: true
+                }
+            },
+            created() {
+                // 方法2
+                this.$parent.titlelist.push(this.label)
+            },
+            template: `
+                <div v-show="isShow">
+                <slot></slot></div>
+            `,
+            data() {
+                return {
+                    isShow: false
+                }
+            },
+
+        })
+
+
+        Vue.component('tabs', {
+            template: `
+            <div class="container">
+            <ul class="header">
+                <li @click="activeIndex=i" :class="{active:i===activeIndex}" v-for="(item,i) in titlelist">{{item}}</li>
+
+            </ul>
+            <div class="content">
+                <slot></slot>
+            </div>
+        </div>
+            `,
+            data() {
+                return {
+                    activeIndex: 0,
+                    titlelist: []
+                }
+            },
+            watch: {
+                activeIndex() {
+                    this.$children.forEach((r, i) => {
+                        r.isShow = i === this.activeIndex
+                    })
+
+                }
+            },
+            mounted() {
+                this.$children[this.activeIndex].isShow = true
+                    // 方式1
+                    // this.titlelist = this.$children.map(r => r.label)
+            },
+        })
+
+        let vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    lists: ['1', '2', '3']
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

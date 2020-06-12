@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索框组件</title>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1854492_zp1rvhpwyb.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <my-input style="margin-top: 10px;" @search="searchData" placeholder="书籍/电影"></my-input>
+        <my-input></my-input>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        Vue.component('my-input', {
+            props: ['placeholder'],
+            data() {
+                return {
+                    keywords: ''
+                }
+            },
+            methods: {
+                search() {
+                    this.$emit('search', this.keywords)
+                }
+            },
+            template: `
+                <div style="border: 1px solid #ccc; display: flex;width: 200px;align-items: center;">
+                <input @keydown.enter="search" v-model="keywords" :placeholder="placeholder" type="text" style="height: 30px;flex: 1;border: none;outline: none;text-indent: 10px;">
+                <i @click="search" style="padding: 0 10px;cursor: pointer;" class="iconfont icon-RectangleCopy2"></i>
+                </div>
+            `
+        })
+
+        let vm = new Vue({
+            el: "#app",
+            methods: {
+                searchData(keyword) {
+                    console.log('外部' + keyword);
+
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

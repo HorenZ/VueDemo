@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .tb {
+            width: 100%;
+            text-align: center;
+            border-collapse: collapse;
+        }
+        
+        .tb.hover-change-color tr:hover {
+            background: #eee;
+        }
+        
+        .tb td,
+        .td th {
+            padding: 5px 0;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div style="width: 500px;">
+            <tb :data="userlist">
+                <td-col label="编号" field="id"></td-col>
+                <td-col label="姓名" field="name"></td-col>
+                <td-col label="年龄" field="age"></td-col>
+                <td-col label="邮箱" field="email"></td-col>
+                <td-col label="QQ" field="qq"></td-col>
+            </tb>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        Vue.component('td-col', {
+            props: {
+                label: {
+                    type: String
+                },
+                field: {
+                    type: String
+                }
+            },
+            template: `
+                <th>{{label}}</th>
+            `,
+            created() {
+                this.$parent.fieldlist.push(this.field)
+            },
+            data() {
+                return {
+
+                }
+            },
+        })
+
+        Vue.component('tb', {
+            props: {
+                data: {
+                    type: Array,
+                }
+            },
+            data() {
+                return {
+                    fieldlist: []
+                }
+            },
+            template: `
+            <table class="tb">
+                <tr>
+                    <slot></slot>
+                </tr>
+                <tr v-for="item in data">
+                    <td v-for="field in fieldlist">{{item[field]}}</td>
+                </tr>
+            </table>
+            `
+        })
+
+
+        let vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    userlist: [{
+                        name: 'Ivan',
+                        id: 1001,
+                        age: 20,
+                        email: 'XX@qq.com'
+                    }, {
+                        name: 'ACE',
+                        id: 1002,
+                        age: 22,
+                        email: 'XX@qq.com'
+                    }, {
+                        name: 'JZ',
+                        id: 1003,
+                        age: 21,
+                        email: 'XX@qq.com'
+                    }]
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

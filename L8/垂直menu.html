@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1714730_sqb0an4ol6i.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" href="./components/menu/css/menu.css">
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <sb-menu :menulist='menulist'></sb-menu>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./components/menu/js/menu.js"></script>
+    <script>
+        let vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    openMenuIndex: 0,
+                    activeItemIndex: 0,
+                    menulist: [{
+                        name: "学员管理",
+                        icon: "icon-home",
+                        children: [{
+                            // 扩展
+                            // href: 'xxx',
+                            // icon: 'asda',
+                            name: '学员列表'
+                        }, {
+                            name: '添加学员'
+                        }, {
+                            name: '学员统计'
+                        }]
+                    }, {
+                        name: "订单管理",
+                        icon: 'icon-favorites',
+                        children: [{
+                            // 扩展
+                            // href: 'xxx',
+                            // icon: 'asda',
+                            name: '订单列表'
+                        }, {
+                            name: '添加订单'
+                        }]
+                    }, {
+                        name: "商品管理",
+                        icon: 'icon-search',
+                        children: [{
+                            // 扩展
+                            // href: 'xxx',
+                            // icon: 'asda',
+                            name: '商品列表'
+                        }]
+                    }]
+                }
+            }
+
+        })
+    </script>
+</body>
+
+</html>

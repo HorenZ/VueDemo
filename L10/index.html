@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .tb {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .tb th,
+        .tb td {
+            border: #ccc 1px solid;
+        }
+        
+        .tb.center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <tb :cols='cols1' center :data='goodslist'></tb>
+        <tb :cols='cols' :data='list'></tb>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        Vue.component('tb', {
+            props: {
+                cols: {
+                    type: Array,
+                    required: true
+                },
+                data: {
+                    type: Array,
+                    required: true
+                },
+                center: {
+                    type: Boolean,
+                }
+            },
+            template: `
+            <table class="tb" :class="{center:center}">
+                <tr>
+                    <th v-for="item in cols">{{item.label}}</th>
+                </tr>
+                <tr v-for="row in data">
+                    <td v-for="col in cols">{{row[col.field]}}</td>
+                </tr>
+            </table>
+            `
+        })
+
+        let vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    cols1: [{
+                        label: "编号",
+                        field: 'id'
+                    }, {
+                        label: "名称",
+                        field: 'name'
+                    }, {
+                        label: "价格",
+                        field: 'price'
+                    }],
+
+                    cols: [{
+                        label: "编号",
+                        field: 'id'
+                    }, {
+                        label: "姓名",
+                        field: 'name'
+                    }, {
+                        label: "年龄",
+                        field: 'age'
+                    }, {
+                        label: "性别",
+                        field: 'gender'
+                    }],
+                    list: [{
+                        id: 1,
+                        name: "Ivan",
+                        age: 21,
+                        gender: '男'
+                    }, {
+                        id: 2,
+                        name: "Ace",
+                        age: 22,
+                        gender: '男'
+                    }, {
+                        id: 3,
+                        name: "Robin",
+                        gender: '女',
+                        age: 23
+                    }],
+                    goodslist: [{
+                        id: 1,
+                        name: "蛋糕",
+                        price: 100
+                    }, {
+                        id: 2,
+                        name: "巧克力",
+                        price: 102
+                    }, {
+                        id: 3,
+                        name: "可比克",
+                        price: 200
+                    }]
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
