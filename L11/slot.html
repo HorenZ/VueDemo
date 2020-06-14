@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .sb-header {
+            height: 60px;
+            background-color: #000;
+            color: #fff;
+            font-size: 20px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .list {
+            border: 1px solid red;
+            width: 200px;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <my-header>
+            <template v-slot:logo>
+                KGC疫情管理系统
+            </template>
+            <template v-slot:username>
+                admin
+            </template>
+        </my-header>
+
+        <my-list :data="userlist">
+            <template #title>
+                猜你想买
+            </template>
+            <template #right="scope">
+                <button>编辑</button>
+               <a href="javascript:;" @click="del(scope.zz)">X</a>
+            </template>
+        </my-list>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        //全局混入  全部vue中均含有这里面定义的东西 存放共用方法、数据
+        Vue.mixin({
+            data() {
+                return {
+                    nickname: "Simba",
+                    BASEURL: "http://127.0.0.1:5501/L11"
+                }
+            },
+            methods: {
+                $get(url) {
+                    return fetch(this.BASEURL + url).then(res => {
+                        if (res.ok)
+                            return res.json()
+                        else
+                            return 'error'
+                    })
+                }
+            }
+        })
+
+        Vue.component('my-header', {
+            template: `
+                <header class="sb-header">
+                    <div>
+                        <slot name="logo"></slot>    
+                    </div>    
+                    <div>
+                        <slot name="username"></slot>    
+                    </div>    
+                </header>
+            `
+        })
+
+        Vue.component('my-list', {
+            async created() {
+                let res = await this.$get('/show.json')
+                console.log(res);
+            },
+            props: ['data'],
+            template: `
+                <div>
+                    <div><slot name="title">默认标题</slot></div>
+                    <ul class="list">
+                        <li v-for="item in data">
+                            {{item.name}}
+                            <slot name="right" :zz="item.id"></slot>
+                        </li>
+                    </ul>
+                </div>
+            `
+        })
+
+
+
+        new Vue({
+            el: "#app",
+            async created() {
+                this.$get('/show.json').then(res => {
+                    console.log(res)
+                })
+            },
+            methods: {
+                del(id) {
+                    console.log("删除" + id);
+
+                }
+            },
+            data() {
+                return {
+                    userlist: [{
+                        id: 1,
+                        name: "Ivan"
+                    }, {
+                        id: 2,
+                        name: "Ace"
+                    }]
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

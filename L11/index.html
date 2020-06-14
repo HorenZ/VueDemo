@@ -20,29 +20,45 @@
 
 <body>
     <div id="app" v-cloak>
-        <counter></counter>
+        <!-- <input type="text" v-bind:value="nickname" @input="nickname=$event.target.value">  -->
+        {{num1}}--{{num2}}
+        <counter v-model="num1"></counter>
+        <counter :value='num2' @input="num2=$event"></counter>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
     <script>
         Vue.component('counter', {
+            props: ['value'],
             data() {
                 return {
-                    num: 0
+                    privite_num: this.value
+                }
+            },
+            watch: {
+                privite_num(val) {
+                    this.$emit('input', val)
                 }
             },
             template: `
             <div>
-            <button @click="num--">-</button>
-            <input type="text" v-model="num">
-            <button @click="num++">+</button>
+                {{value+10}}
+            <button @click="privite_num--">-</button>
+            <input type="text" v-model.number.tirm="privite_num">
+            <button @click="privite_num++">+</button>
         </div>
             `
         })
 
         new Vue({
             el: "#app",
+            data() {
+                return {
+                    num1: 10,
+                    num2: 12
+                }
+            },
 
         })
     </script>
