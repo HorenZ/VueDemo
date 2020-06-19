@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <sb-link to='http://baidu.com'>百度</sb-link>
+        <input type="text" v-focus.number.trim='zzz'>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // 指令
+        Vue.directive('focus', {
+            inserted(el, binding) {
+                // 需要去空格
+                if (binding.modifiers.trim) {
+
+                }
+                // 需要转数字
+                if (binding.modifiers.number) {
+
+                }
+                el.focus()
+                el.value = binding.value
+
+            }
+        })
+
+        // 插件 install 固定格式
+        let plugin = {
+            install(Vue, options) {
+                Vue.mixin({
+                    methods: {
+                        go(url) {
+                            location.href = url
+                        }
+                    },
+                })
+
+                Vue.component('sb-link', {
+                    props: ['to'],
+                    template: `<a :href="to"><slot></slot></a>`
+                })
+            }
+        }
+
+        Vue.use(plugin)
+
+        new Vue({
+            el: "#app",
+            mounted() {
+
+            },
+            data() {
+                return {
+                    zzz: 'zzzzz'
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

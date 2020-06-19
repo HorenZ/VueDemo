@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <router-link tag="button" to='/'>首页</router-link>
+        <router-link to='/user'>用户</router-link>
+        <router-link to='/login'>登录</router-link>
+        <router-view></router-view>
+        <button @click="gouser">跳转到用户</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            mounted() {
+                // 所有路由
+                console.log(this.$router);
+                // 当前路由信息
+                console.log(this.$route);
+
+
+            },
+            methods: {
+                gouser() {
+                    this.$router.push('/user')
+                }
+            },
+            router: new VueRouter({
+                routes: [{
+                    path: "/",
+                    component: {
+                        template: `<h1>首页</h1>`
+                    }
+                }, {
+                    path: "/user",
+                    component: {
+                        template: `<h1>用户</h1>`
+                    }
+                }, {
+                    path: "/login",
+                    component: {
+                        template: `<h1>登录</h1>`
+                    }
+                }]
+            })
+        })
+    </script>
+</body>
+
+</html>
