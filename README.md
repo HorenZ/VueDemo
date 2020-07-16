@@ -12,3 +12,5 @@ L9  使用template制作Tab、表格
 L10 使用template制作搜索框、表格（另外一种方式）
 L11 具名插槽、组件（template）中的v-model、混入
 L12 webpack
+L13 指令、路由入门
+L14 vue-cli 手机仿京东页面制作
