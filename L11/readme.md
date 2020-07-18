@@ -1,5 +1,5 @@
 ## 组件中使用v-model
-> Vue对于组件提供一个语法糖v-model，如果使用v-model，则组件必须接收一个prpos为value，比如$emit一个事件为input形如：
+> Vue对于组件提供一个语法糖v-model，如果使用v-model，则组件必须接收一个prpos为value，比如$emit 一个事件为input形如：
 ```
  <counter v-model="num1"></counter>
  <counter :value='num1' @input="num1=$event"></counter>

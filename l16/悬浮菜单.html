@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        .menu {
+            background: #ccc;
+            height: 40px;
+            width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .menu li {
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            height: 100%;
+            line-height: 40px;
+        }
+        
+        .menu li .layer {
+            position: absolute;
+            height: 200px;
+            background: pink;
+            width: 100vw;
+            /* 父级的高度 相当于40px */
+            top: 100%;
+            left: 0;
+            display: none;
+        }
+        
+        .menu li:hover .layer {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div style="position: relative;">
+            <ul class="menu">
+                <li>
+                    8888
+                    <div class="layer"></div>
+                </li>
+                <li>1111</li>
+                <li>2222</li>
+                <li>3333</li>
+                <li>4444</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        new Vue({
+            el: "#app",
+
+        })
+    </script>
+</body>
+
+</html>

@@ -14,3 +14,7 @@ L11 具名插槽、组件（template）中的v-model、混入
 L12 webpack
 L13 指令、路由入门
 L14 vue-cli 手机仿京东页面制作
+L15 sass的使用 cnpm i sass-loader node-sass
+L16 导航悬浮效果
+L17 非父子组件传值、provide、事件总线
+L18 Vuex辅助函数及其原理/actions
